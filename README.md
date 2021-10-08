@@ -13,6 +13,9 @@ This project is an application to take notes. It will allow you to add and delet
 
 To get this project working for yourself you can clone it down from GitHub. Once cloned down (npm i) on the terminal. Once all the installations have completed run (node server.js)
 ## Usage
+The below link should take you to the deployed paged. 
+https://fathomless-stream-10357.herokuapp.com/
+
 I have attached a screenshot of the project below: ![alt text](Develop/public/images/NoteTakerScreenShot.png)
     
 ## Credits
