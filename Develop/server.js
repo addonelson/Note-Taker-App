@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 const takenNotesArray =[];
+
  //app.get are requests for notes routes
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, 'public/notes.html'));
@@ -63,15 +64,22 @@ app.post('/api/notes', (req, res) => {
 
 // This route should allow users to delete previously added notes.
 app.delete(`/api/notes/:id`, (req, res) => {
+    fs.readFile("./db/db.json", "utf-8", function (err, data) {
+
+    const takenNotesArray = JSON.parse(data);
+
     for (let i = 0; i < takenNotesArray.length; i++) {
         if (takenNotesArray[i].id === req.params.id) {
             takenNotesArray.splice(i, 1)
+            
             break;
         }
     }
-    contentWrite("./db/db.json", dbNotes); // file will now be changed to support the deleted file. 
-    res.json(dbNotes)
-})
+    contentWrite("./db/db.json", takenNotesArray); // file will now be changed to support the deleted file. 
+    res.json(takenNotesArray)
+});
+});
+
 // get request that will return html file 
 app.get('*', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/index.html'))
