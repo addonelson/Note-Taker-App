@@ -4,25 +4,24 @@ const path = require('path');
 const fs = require('fs');
 const util = require('util');
 const uuid = require('uuid');
+const { json } = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const readFromFile = util.promisify(fs.readFile);
-
-
+const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
- 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
+const takenNotesArray =[];
+ //app.get are requests for notes routes
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, 'public/notes.html'));
 });
-
-app.get('/api/notes', (req, res) => res.json(dbNotes));
+//app.get are for api/notes routes .then promise to recieve data then takes response and returns Json then parse then data
+app.get('/api/notes', (req, res) => {
+    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
+});
 
 
 app.post("/api/notes", (req, res) => {
