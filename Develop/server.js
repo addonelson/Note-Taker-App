@@ -1,17 +1,17 @@
 const express = require('express');
 const dbNotes = require('./db/db.json');
-const pathname = require('path');
+const path = require('path');
 const fs = require('fs');
+const util = require('util');
+const uuid = require('uuid');
+
+
 
 
 const PORT = 3001;
 const app = express();
 
-const uuidv =  () => {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  };
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
