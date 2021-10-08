@@ -3,7 +3,7 @@ const dbNotes = require('./db/db.json');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
-const uuid = require('./helpers/uuid');
+const uuid = require('./public/helpers/uuid');
 const { json } = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -36,13 +36,14 @@ const appendFile = (content, file) => {
         } else {
             const parsedData = JSON.parse(data);
             parsedData.push(content);
-            writeToFile(file, parsedData);
+            contentWrite(file, parsedData);
         }
     });
 };
 
 // post route to allow new submissions which will append them to the json file.
 app.post('/api/notes', (req, res) => {
+    // destructuring body
     const { title, text } = req.body;
     if (req.body) {
         const newUserNote = {
@@ -50,7 +51,7 @@ app.post('/api/notes', (req, res) => {
             text,
             id: uuid(),
         };
-        AppendFile(newUserNote, './db/db.json');
+        appendFile(newUserNote, './db/db.json');
         takenNotesArray.push(newUserNote)
         console.log(takenNotesArray);
         res.json(`Your note has been added`);
@@ -62,14 +63,14 @@ app.post('/api/notes', (req, res) => {
 
 // This route should allow users to delete previously added notes.
 app.delete(`/api/notes/:id`, (req, res) => {
-    for (let i = 0; i < notesArray.length; i++) {
-        if (notesArray[i].id === req.params.id) {
-            notesArray.splice(i, 1)
+    for (let i = 0; i < takenNotesArray.length; i++) {
+        if (takenNotesArray[i].id === req.params.id) {
+            takenNotesArray.splice(i, 1)
             break;
         }
     }
-    contentWrite("./db/db.json", notesFile); // file will now be changed to support the deleted file. 
-    res.json(notesFile)
+    contentWrite("./db/db.json", dbNotes); // file will now be changed to support the deleted file. 
+    res.json(dbNotes)
 })
 // get request that will return html file 
 app.get('*', (req, res) =>
